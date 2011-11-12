@@ -1,51 +1,4 @@
-#!/usr/local/bin/python
-# 2005/01/02
-#v1.0.1 
-
-# cookie_example.py
-# An example showing the usage of cookielib (New to Python 2.4) and ClientCookie
-
-# Copyright Michael Foord, 2004.
-# Released subject to the BSD License
-# Please see http://www.voidspace.org.uk/documents/BSD-LICENSE.txt
-
-# For information about bugfixes, updates and support, please join the Pythonutils mailing list.
-# http://voidspace.org.uk/mailman/listinfo/pythonutils_voidspace.org.uk
-# Comments, suggestions and bug reports welcome.
-# Scripts maintained at http://www.voidspace.org.uk/python/index.shtml
-# E-mail fuzzyman@voidspace.org.uk
-
-"""
-cookielib is a library new to Python 2.4
-Prior to Python 2.4 it existed as ClientCookie, but it's not a drop in replacement.
-In Python 2.4 some of the function of ClientCookie has been made into modifications of urllib2
-
-This example shows basic code for fetching URIs that will work unchanged on :
-a machine with python 2.4 (and cookielib)
-a machine with ClientCookie
-a machine with neither
-(Obviously on the machine with neither the cookies won't be handled or saved).
-
-Where either cookielib or ClientCookie is available the cookies will be saved in a file.
-If that file exists already the cookies will first be loaded from it.
-The file format is a useful plain text format and the attributes of each cookie is accessible in the Cookiejar instance (once loaded).
-
-This may be helpful to those just using ClientCookie as the ClientCookie documentation doesn't appear to document the LWPCookieJar class which is needed for saving and loading cookies.
-
-*WHY*
-I'm writing a cgi-proxy called approx.py (see www.voidspace.org.uk/atlantibots/pythonutils.html#cgiproxy ).
-It remotely fetches webpages for those in a restricted internet environment.
-If ClientCookie is available it will handle cookies (and works well) - including loading/saving a different set of cookies for each user.
-My server has python 2.2 - but I'd like the script to function well on machines with Python 2.4 or without ClientCookie at all.
-This code installs a Cookiejar and CookieProcessor as the default handler for urllib2.urlopen if these are available.
-Otherwise calls to urlopen work as normal.
-
-If the example works as it should then you'll see some page headers printed and then the cookie that the server sent you.
-This should then be saved to a file 'cookies.lwp'
-(of course you may need to install ClientCookie)
-
-Of course this example also illustrates using Request objects and headers etc to fetch webpages....
-"""
+#!/usr/bin/python
 
 COOKIEFILE = 'cookies.lwp'          # the path and filename that you want to use to save your cookies in
 import os.path
@@ -56,17 +9,17 @@ ClientCookie = None
 cookielib = None
 
 try:                                    # Let's see if cookielib is available
-    import cookielib            
+    import cookielib
 except ImportError:
     pass
 else:
-    import urllib2    
+    import urllib2
     urlopen = urllib2.urlopen
     cj = cookielib.LWPCookieJar()       # This is a subclass of FileCookieJar that has useful load and save methods
     Request = urllib2.Request
 
 if not cookielib:                   # If importing cookielib fails let's try ClientCookie
-    try:                                            
+    try:
         import ClientCookie 
     except ImportError:
         import urllib2
@@ -76,12 +29,12 @@ if not cookielib:                   # If importing cookielib fails let's try Cli
         urlopen = ClientCookie.urlopen
         cj = ClientCookie.LWPCookieJar()
         Request = ClientCookie.Request
-        
+
 ####################################################
 # We've now imported the relevant library - whichever library is being used urlopen is bound to the right function for retrieving URLs
 # Request is bound to the right function for creating Request objects
 # Let's load the cookies, if they exist. 
-    
+
 if cj != None:                                  # now we have to install our CookieJar so that it is used as the default CookieProcessor in the default opener handler
     if os.path.isfile(COOKIEFILE):
         cj.load(COOKIEFILE)
@@ -96,9 +49,12 @@ if cj != None:                                  # now we have to install our Coo
 # (Note that if we are using ClientCookie we haven't explicitly imported urllib2)
 # as an example :
 
-theurl = 'http://www.google.co.uk/search?hl=en&ie=UTF-8&q=voidspace&meta='         # an example url that sets a cookie, try different urls here and see the cookie collection you can make !
-txdata = None                                                                           # if we were making a POST type request, we could encode a dictionary of values here - using urllib.urlencode
-txheaders =  {'User-agent' : 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'}          # fake a user agent, some websites (like google) don't like automated exploration
+
+
+theurl = 'http://localhost:8080/rest/auth/latest/session'
+txdata = '{"username" : "jaxelson", "password" : "hunter2"}'
+#txheaders =  {'Content-Type' : 'application/json', 'User-agent' : 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'}
+txheaders =  {'Content-Type' : 'application/json'}
 
 try:
     req = Request(theurl, txdata, txheaders)            # create a request object
@@ -111,7 +67,7 @@ except IOError, e:
         print "The error object has the following 'reason' attribute :", e.reason
         print "This usually means the server doesn't exist, is down, or we don't have an internet connection."
         sys.exit()
-        
+
 else:
     print 'Here are the headers of the page :'
     print handle.info()                             # handle.read() returns the page, handle.geturl() returns the true url of the page fetched (in case urlopen has followed any redirects, which it sometimes does)
@@ -124,7 +80,7 @@ else:
     print 'These are the cookies we have received so far :'
     for index, cookie in enumerate(cj):
         print index, '  :  ', cookie        
-    cj.save(COOKIEFILE)                     # save the cookies again
+    cj.save(COOKIEFILE, ignore_discard=True)                     # save the cookies again
 
 # We can always tell which import was successful.
 # If we are using cookielib then cookielib != None
