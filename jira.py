@@ -2,6 +2,7 @@
 import sys
 
 from jiraFunc import *
+from git_util import *
 
 def printUsage():
     print "Usage: git jira [describe [branch]]"
