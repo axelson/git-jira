@@ -6,18 +6,23 @@ from subprocess import call
 from subprocess import Popen
 from subprocess import PIPE
 
+from util import *
+
 # Targetting jira version Atlassian JIRA (v4.3.3#617-r149616)
 
 class jiraObj:
     def __init__(self,issue):
-        #TODO: Handle when the issue doesn't exist in JIRA
         self.data = getIssueInfo(issue)
+        if(self.data.has_key('errorMessages')):
+            print "Warning: This issue doesn't exist: %s" % issue
+            raise Exception("Missing Issue")
         self.name = self.data['key']
         try:
             self.description = self.data['fields']['description']['value']
         except KeyError:
             self.description = None
         self.summary = self.data['fields']['summary']['value']
+        self.status = self.data['fields']['status']['value']['name']
     def printData(self):
         print "name: %s" % self.name
         print "summary: %s" % self.summary
@@ -35,20 +40,17 @@ class jiraObj:
         print "%(name)s: %(summary)s" % {"name":self.name, "summary":self.summary}
         print
         print self.description
+        print "Status: %s" % self.status
+        print "Jira URL: http://" + jiraUrl + "/browse/" + self.name
 
 
 # Settings
-jira = 'nihoa'
+jiraUrl = 'nihoa'
 jiraApi = '/rest/api/2.0.alpha1'
 headers = {'Content-type': 'application/json','Accept': 'application/json'}
 
-def run(command):
-    #print "running %s " % command
-    pipe = Popen(str.split(command), stdout=PIPE, stderr=PIPE)
-    output = pipe.stdout.read()
-    return output
-
 def describeBranch(branch):
+    #print "Describing branch %s" % branch
     obj = jiraObj(branch)
     #obj.printData()
     obj.printDetails()
@@ -72,7 +74,7 @@ def getIssueInfo(issue):
     #print "Getting info for Jira issue %s" % issue
     endpoint = jiraApi + '/issue/' + issue
 
-    conn = httplib.HTTPConnection(jira);
+    conn = httplib.HTTPConnection(jiraUrl);
     conn.request('GET',url=endpoint,headers=headers)
     response = conn.getresponse()
     data = response.read()
@@ -88,7 +90,7 @@ def loadIssues(jiraProject):
     #print "endpoint: %s" % endpoint
 
     '''Load a list of open issues from JIRA'''
-    conn = httplib.HTTPConnection(jira);
+    conn = httplib.HTTPConnection(jiraUrl);
     params = urllib.urlencode({'jql': query})
     conn.request('GET',url=endpoint+"?" +params,headers=headers)
     response = conn.getresponse()
@@ -107,9 +109,11 @@ def listIssues(issues):
 
 def selectIssue(issues):
     '''Prompt the user to select an issue from a list of issues'''
-    print "Select an issue:"
+    print "Select from the issues below:"
     listIssues(issues)
+    print "Issue number:",
     selection = raw_input()
+    print
     return getIssueDescription(issues, selection)
 
 def getIssueDescription(issues, issueToGet):
@@ -129,3 +133,11 @@ def getBranchName():
     output = run("git symbolic-ref HEAD")
     branchName = output.split('/')[2]
     return branchName
+
+def createBranch(branch):
+    '''Create the given git branch'''
+    run("git branch %s" % branch)
+
+def checkoutBranch(branch):
+    '''Checkout the given git branch'''
+    run("git checkout %s" % branch)
