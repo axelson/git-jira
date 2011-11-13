@@ -85,20 +85,19 @@ def opFeature():
     print "nothing"
 
 def opCreate(argv):
-    print "create test"
-    setGitValue('username', 'jaxelson')
+    print "nothing"
+
+def opLogin(argv):
+    gitUsername = getGitValue('username')
     theurl = 'http://localhost:8080/rest/auth/latest/session'
-    txdata = '{"username" : "jaxelson", "password" : "hunter2"}'
-    #txheaders =  {'Content-Type' : 'application/json', 'User-agent' : 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'}
+    txdata = '{"username" : "' + gitUsername +'", "password" : "hunter2"}'
     txheaders =  {'Content-Type' : 'application/json'}
     obj = cookieHandler()
-    #obj.getPage('http://localhost:8080/browse/HICAP-1')
     req = obj.Request(theurl, txdata, txheaders)            # create a request object
     handle = obj.urlopen(req)                               # and open it to return a handle on the url
     print "got page!"
-    print handle.info()
-    print "name is < %s >" % getGitValue('username')
-    print "nothing"
+    print handle.read()
+
 
 operations = {
         "describe": describe,
@@ -107,6 +106,7 @@ operations = {
         "list": opList,
         "help": opHelp,
         "start": opStart,
+        "login": opLogin,
         "-h": opHelp,
         "--help": opHelp,
         }
