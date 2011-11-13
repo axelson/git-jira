@@ -88,15 +88,16 @@ def opCreate(argv):
     print "nothing"
 
 def opLogin(argv):
-    gitUsername = getGitValue('username')
-    theurl = 'http://localhost:8080/rest/auth/latest/session'
-    txdata = '{"username" : "' + gitUsername +'", "password" : "hunter2"}'
+    # Does the equivalent of this curl command
+    # curl -c cookie_jar -H "Content-Type: application/json" -d '{"username" : "jaxelson", "password" : "hunter2"}' http://localhost:8080/rest/auth/latest/session
+    username = getGitValue('username')
+    password = getGitValue('password')
+    loginUrl = 'http://localhost:8080/rest/auth/latest/session'
+    txdata = '{"username" : "' + username +'", "password" : "'+ password +'"}'
     txheaders =  {'Content-Type' : 'application/json'}
-    obj = cookieHandler()
-    req = obj.Request(theurl, txdata, txheaders)            # create a request object
-    handle = obj.urlopen(req)                               # and open it to return a handle on the url
-    print "got page!"
-    print handle.read()
+    cookie = cookieHandler()
+    req = cookie.Request(loginUrl, txdata, txheaders)            # create a request object
+    handle = cookie.urlopen(req)                               # and open it to return a handle on the url
 
 
 operations = {
