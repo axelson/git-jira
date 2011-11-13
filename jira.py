@@ -6,8 +6,9 @@ from git_util import *
 from cookies import *
 
 def printUsage():
-    print "Usage: git jira [describe [branch]]"
-    print "       git jira [list]"
+    print "Usage: git jira [operation [args]]"
+    print "       git jira [describe [branch]]"
+    print "Valid operations: %s" % operations.keys()
 
 if(len(sys.argv) < 2):
     printUsage()
