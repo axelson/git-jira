@@ -3,6 +3,7 @@ import sys
 
 from jiraFunc import *
 from git_util import *
+from cookies import *
 
 def printUsage():
     print "Usage: git jira [describe [branch]]"
@@ -86,6 +87,16 @@ def opFeature():
 def opCreate(argv):
     print "create test"
     setGitValue('username', 'jaxelson')
+    theurl = 'http://localhost:8080/rest/auth/latest/session'
+    txdata = '{"username" : "jaxelson", "password" : "hunter2"}'
+    #txheaders =  {'Content-Type' : 'application/json', 'User-agent' : 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'}
+    txheaders =  {'Content-Type' : 'application/json'}
+    obj = cookieHandler()
+    #obj.getPage('http://localhost:8080/browse/HICAP-1')
+    req = obj.Request(theurl, txdata, txheaders)            # create a request object
+    handle = obj.urlopen(req)                               # and open it to return a handle on the url
+    print "got page!"
+    print handle.info()
     print "name is < %s >" % getGitValue('username')
     print "nothing"
 
