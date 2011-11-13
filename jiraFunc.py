@@ -85,11 +85,11 @@ def getIssueInfo(issue):
 
 
 def loadIssues(jiraProject):
+    '''Load a list of open issues from JIRA'''
     resolution = 'unresolved'
     query = 'project=' + jiraProject + ' AND resolution=' + resolution
     endpoint = jiraApi + '/search'
 
-    '''Load a list of open issues from JIRA'''
     params = urllib.urlencode({'jql': query})
 
     cookie = cookieHandler()
