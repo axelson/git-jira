@@ -98,6 +98,8 @@ def opLogin(argv):
     cookie = cookieHandler()
     req = cookie.Request(loginUrl, txdata, txheaders)            # create a request object
     handle = cookie.urlopen(req)                               # and open it to return a handle on the url
+    print handle.read()
+    cookie.saveCookies()
 
 
 operations = {

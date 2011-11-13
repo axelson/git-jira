@@ -7,6 +7,7 @@ from subprocess import Popen
 from subprocess import PIPE
 
 from util import *
+from cookies import *
 
 # Targetting jira version Atlassian JIRA (v4.3.3#617-r149616)
 
@@ -45,7 +46,7 @@ class jiraObj:
 
 
 # Settings
-jiraUrl = 'nihoa'
+jiraUrl = 'localhost:8080'
 jiraApi = '/rest/api/2.0.alpha1'
 headers = {'Content-type': 'application/json','Accept': 'application/json'}
 
@@ -74,10 +75,10 @@ def getIssueInfo(issue):
     #print "Getting info for Jira issue %s" % issue
     endpoint = jiraApi + '/issue/' + issue
 
-    conn = httplib.HTTPConnection(jiraUrl);
-    conn.request('GET',url=endpoint,headers=headers)
-    response = conn.getresponse()
-    data = response.read()
+    url = 'http://' +jiraUrl + endpoint
+    cookie = cookieHandler()
+    handle = cookie.getPage(url)
+    data = handle.read()
 
     loaded = json.loads(data)
     return loaded
@@ -87,14 +88,16 @@ def loadIssues(jiraProject):
     resolution = 'unresolved'
     query = 'project=' + jiraProject + ' AND resolution=' + resolution
     endpoint = jiraApi + '/search'
-    #print "endpoint: %s" % endpoint
 
     '''Load a list of open issues from JIRA'''
-    conn = httplib.HTTPConnection(jiraUrl);
     params = urllib.urlencode({'jql': query})
-    conn.request('GET',url=endpoint+"?" +params,headers=headers)
-    response = conn.getresponse()
-    data = response.read()
+
+    cookie = cookieHandler()
+    url = 'http://' + jiraUrl + endpoint+"?" +params
+    req = cookie.Request(url, None, headers)
+    handle = cookie.urlopen(req)
+
+    data = handle.read()
 
     loaded = json.loads(data)
     #print loaded

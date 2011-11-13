@@ -17,7 +17,8 @@ class cookieHandler:
         else:
             import urllib2
             self.urlopen = urllib2.urlopen
-            self.cj = cookielib.LWPCookieJar()
+            self.cj = cookielib.LWPCookieJar(COOKIEFILE)
+            self.cj.load(ignore_discard=True)
             self.Request = urllib2.Request
 
         if not cookielib:                   # If importing cookielib fails let's try ClientCookie
@@ -25,12 +26,13 @@ class cookieHandler:
                 import ClientCookie
             except ImportError:
                 import urllib2
-                urlopen = urllib2.urlopen
-                Request = urllib2.Request
+                self.urlopen = urllib2.urlopen
+                self.Request = urllib2.Request
             else:
-                urlopen = ClientCookie.urlopen
-                self.cj = ClientCookie.LWPCookieJar()
-                Request = ClientCookie.Request
+                self.urlopen = ClientCookie.urlopen
+                self.cj = ClientCookie.LWPCookieJar(COOKIEFILE)
+                self.cj.load(ignore_discard=True)
+                self.Request = ClientCookie.Request
 
         ####################################################
         # We've now imported the relevant library - whichever library is being used urlopen is bound to the right function for retrieving URLs
@@ -54,13 +56,13 @@ class cookieHandler:
         req = self.Request(newurl)
         # create a request object
         handle = self.urlopen(req)
-        print handle.info()
+        return handle
 
 
     def printCookies(self):
         print 'These are the cookies we have received so far :'
-        for index, cookie in enumerate(cj):
+        for index, cookie in enumerate(self.cj):
             print index, '  :  ', cookie
 
     def saveCookies(self):
-        cj.save(COOKIEFILE, ignore_discard=True)
+        self.cj.save(COOKIEFILE, ignore_discard=True)
