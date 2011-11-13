@@ -18,7 +18,10 @@ class cookieHandler:
             import urllib2
             self.urlopen = urllib2.urlopen
             self.cj = cookielib.LWPCookieJar(COOKIEFILE)
-            self.cj.load(ignore_discard=True)
+            try:
+                self.cj.load(ignore_discard=True)
+            except IOError:
+                pass
             self.Request = urllib2.Request
 
         if not cookielib:                   # If importing cookielib fails let's try ClientCookie
@@ -52,11 +55,27 @@ class cookieHandler:
                 opener = ClientCookie.build_opener(ClientCookie.HTTPCookieProcessor(self.cj))
                 ClientCookie.install_opener(opener)
 
+        print "check login"
+        self.login()
+
     def getPage(self, newurl):
         req = self.Request(newurl)
         # create a request object
         handle = self.urlopen(req)
         return handle
+
+    def login(self):
+        import urllib2
+        loginUrl = 'http://localhost:8080/rest/auth/latest/session'
+        handle = None
+        try:
+            handle = self.getPage(loginUrl)
+        except urllib2.HTTPError:
+            print "http error"
+            print "not logged in"
+        else:
+            print "logged in"
+            print handle.info()
 
 
     def printCookies(self):

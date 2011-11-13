@@ -102,6 +102,14 @@ def opLogin(argv):
     print handle.read()
     cookie.saveCookies()
 
+def opInit(argv):
+    setGitValue('username', 'jaxelson')
+    setGitValue('password', 'hunter2')
+    loginUrl = 'http://localhost:8080/rest/auth/latest/session'
+    cookie = cookieHandler()
+    import urllib2
+    pass
+
 
 operations = {
         "describe": describe,
@@ -111,6 +119,7 @@ operations = {
         "help": opHelp,
         "start": opStart,
         "login": opLogin,
+        "init": opInit,
         "-h": opHelp,
         "--help": opHelp,
         }
