@@ -7,6 +7,7 @@ from subprocess import Popen
 from subprocess import PIPE
 
 from util import *
+from git_util import *
 from cookies import *
 
 # Targetting jira version Atlassian JIRA (v4.3.3#617-r149616)
@@ -58,18 +59,14 @@ def describeBranch(branch):
 
 def getJiraProjectName():
     '''Gets the name of the JIRA project for this repo (prompting the user if necessary)'''
-    jiraName = run("git config rams.jiraname")
+    jiraName = getGitValue('jiraname')
     if(jiraName == ''):
         print "No jira name set, what is the jira name of this repo? "
         selection = raw_input()
-        setJiraProjectName(selection)
+        setGitValue('jiraname', selection)
         jiraName = selection
 
     return jiraName
-
-def setJiraProjectName(name):
-    '''Set the name of the JIRA project for this repo'''
-    run("git config rams.jiraname %s" % name)
 
 def getIssueInfo(issue):
     #print "Getting info for Jira issue %s" % issue
