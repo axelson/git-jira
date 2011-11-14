@@ -61,7 +61,6 @@ class cookieHandler:
                 opener = ClientCookie.build_opener(ClientCookie.HTTPCookieProcessor(self.cj))
                 ClientCookie.install_opener(opener)
 
-        print "going to ensure login"
         self.ensureLogin()
 
     def getPage(self, newurl):
@@ -71,12 +70,12 @@ class cookieHandler:
         return handle
 
     def ensureLogin(self):
-        print "ensure login"
+        #print "ensure login"
         if not(self.checkLogin()):
             self.doLogin()
 
     def checkLogin(self):
-        print "check login running"
+        #print "check login running"
         loginUrl = 'http://localhost:8080/rest/auth/latest/session'
         handle = None
         try:
@@ -87,8 +86,6 @@ class cookieHandler:
             else:
                 raise
         else:
-            print "logged in"
-            #print handle.info()
             return True
 
     def doLogin(self):
@@ -97,20 +94,17 @@ class cookieHandler:
         print "Logging in to JIRA as %s" % username
         loginUrl = 'http://localhost:8080/rest/auth/latest/session'
         txdata = '{"username" : "' + username +'", "password" : "'+ password +'"}'
-        print txdata
         txheaders =  {'Content-Type' : 'application/json'}
         req = self.Request(loginUrl, txdata, txheaders)            # create a request object
-        print "about to create handle"
         try:
             handle = self.urlopen(req)                               # and open it to return a handle on the url
         except:
             return
-        print "created handle"
         print handle.read()
+        print
         self.saveCookies()
-        print "login is now"
-        print self.checkLogin()
-
+        if not(self.checkLogin()):
+            print "ERROR, Unable to Login"
 
     def printCookies(self):
         print 'These are the cookies we have received so far :'

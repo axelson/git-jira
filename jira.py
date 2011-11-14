@@ -61,6 +61,7 @@ def opList(argv):
     '''List all the open issues in the current project'''
     jiraProject = getJiraProjectName()
     data = loadIssues(jiraProject)
+    print "Open issues:"
     listIssues(data['issues'])
 
 def opHelp(argv):
