@@ -92,7 +92,11 @@ def loadIssues(jiraProject):
     cookie = cookieHandler()
     url = 'http://' + jiraUrl + endpoint+"?" +params
     req = cookie.Request(url, None, headers)
-    handle = cookie.urlopen(req)
+    handle = None
+    try:
+        handle = cookie.urlopen(req)
+    except cookie.HTTPError:
+        print "error occurred"
 
     data = handle.read()
 

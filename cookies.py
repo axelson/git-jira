@@ -3,6 +3,7 @@
 COOKIEFILE = 'cookies.lwp'          # the path and filename that you want to use to save your cookies in
 import os.path
 import sys
+from git_util import *
 
 class cookieHandler:
     def __init__(self):
@@ -16,6 +17,7 @@ class cookieHandler:
             pass
         else:
             import urllib2
+            self.HTTPError = urllib2.HTTPError
             self.urlopen = urllib2.urlopen
             self.cj = cookielib.LWPCookieJar(COOKIEFILE)
             try:
@@ -29,9 +31,13 @@ class cookieHandler:
                 import ClientCookie
             except ImportError:
                 import urllib2
+                self.HTTPError = urllib2.HTTPError
                 self.urlopen = urllib2.urlopen
                 self.Request = urllib2.Request
             else:
+                # TODO This might not work, might need the import statement
+                self.HTTPError = urllib2.HTTPError
+                #import urllib2.HTTPError as self.HTTPError
                 self.urlopen = ClientCookie.urlopen
                 self.cj = ClientCookie.LWPCookieJar(COOKIEFILE)
                 self.cj.load(ignore_discard=True)
@@ -55,8 +61,8 @@ class cookieHandler:
                 opener = ClientCookie.build_opener(ClientCookie.HTTPCookieProcessor(self.cj))
                 ClientCookie.install_opener(opener)
 
-        print "check login"
-        self.login()
+        print "going to ensure login"
+        self.ensureLogin()
 
     def getPage(self, newurl):
         req = self.Request(newurl)
@@ -64,18 +70,46 @@ class cookieHandler:
         handle = self.urlopen(req)
         return handle
 
-    def login(self):
-        import urllib2
+    def ensureLogin(self):
+        print "ensure login"
+        if not(self.checkLogin()):
+            self.doLogin()
+
+    def checkLogin(self):
+        print "check login running"
         loginUrl = 'http://localhost:8080/rest/auth/latest/session'
         handle = None
         try:
             handle = self.getPage(loginUrl)
-        except urllib2.HTTPError:
-            print "http error"
-            print "not logged in"
+        except self.HTTPError, err:
+            if(err.code == 401):
+                return False
+            else:
+                raise
         else:
             print "logged in"
-            print handle.info()
+            #print handle.info()
+            return True
+
+    def doLogin(self):
+        username = getGitValue('username')
+        password = getGitValue('password')
+        print "Logging in to JIRA as %s" % username
+        loginUrl = 'http://localhost:8080/rest/auth/latest/session'
+        txdata = '{"username" : "' + username +'", "password" : "'+ password +'"}'
+        print txdata
+        txheaders =  {'Content-Type' : 'application/json'}
+        req = self.Request(loginUrl, txdata, txheaders)            # create a request object
+        print "about to create handle"
+        try:
+            handle = self.urlopen(req)                               # and open it to return a handle on the url
+        except:
+            return
+        print "created handle"
+        print handle.read()
+        self.saveCookies()
+        print "login is now"
+        print self.checkLogin()
 
 
     def printCookies(self):
