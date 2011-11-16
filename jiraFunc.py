@@ -61,7 +61,7 @@ def getJiraProjectName():
     '''Gets the name of the JIRA project for this repo (prompting the user if necessary)'''
     jiraName = getGitValue('jiraname')
     if(jiraName == ''):
-        print "No jira name set, what is the jira name of this repo? "
+        print "No jira name set, what is the jira (project) name of this repo? "
         selection = raw_input()
         setGitValue('jiraname', selection)
         jiraName = selection
