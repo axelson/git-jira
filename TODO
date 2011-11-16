@@ -1,1 +1,4 @@
 See if we can get the list of all projects on the current JIRA server
+* Pull jiraUrl from git config and set it on git jira init
+* Require git jira init to be run before doing operations
+** Check if git jira init was run before doing operations
