@@ -1,4 +1,6 @@
-See if we can get the list of all projects on the current JIRA server
+* See if we can get the list of all projects on the current JIRA server
+** http://docs.atlassian.com/jira/REST/latest/#id2476168
+** /api/2.0.alpha1/project
 * Pull jiraUrl from git config and set it on git jira init
 * Require git jira init to be run before doing operations
 ** Check if git jira init was run before doing operations
