@@ -101,17 +101,21 @@ def opLogin(argv):
     cookie.saveCookies()
 
 def opInit(argv):
-    print "Please type your jira url (example, nihoa): "
-    url = raw_input()
+    setGitValue('username', 'jaxelson')
+    setGitValue('password', 'hunter2')
+    url = getJiraUrlFromUser()
     setGitValue('url', url)
 
     print "Please type your username (password is only asked at login): "
     username = raw_input()
     setGitValue('username', username)
-    loginUrl = 'http://localhosted:8080/rest/auth/latest/session'
-    cookie = cookieHandler()
-    import urllib2
-    pass
+    #TODO: Ask user if they want to store their password
+
+def getJiraUrlFromUser():
+    print "Please type your jira url (e.g.: nihoa): "
+    #TODO: Support parsing from browser login
+    selection = raw_input()
+    return selection
 
 
 operations = {
