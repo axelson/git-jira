@@ -39,13 +39,17 @@ def opDescribe(argv):
     else:
         branchName = getBranchName()
     #print "branch name is %s" % branchName
+    cookie = cookieHandler()
     try:
         describeBranch(branchName)
-    except Exception as inst:
+    except KeyError as inst:
+        #TODO: Shouldn't be KeyError for older version of Jira
         if(inst.args[0] == "Missing Issue"):
             print "Missing issue, so no description for %s" % branchName
         else:
             raise
+    except cookie.HTTPError as inst:
+        print "Unable to find issue %s (%s)" (branchName, inst)
 
 def userChooseIssue():
     '''User operation to list the jira issues for the current project'''
