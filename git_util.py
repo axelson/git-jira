@@ -28,5 +28,7 @@ def getBranchName():
     '''Return the name of the current branch'''
     # Expect output like 'refs/heads/dev'
     output = run("git symbolic-ref HEAD")
+    #print "output < %s >" % output
     branchName = output.split('/')[2]
-    return branchName
+    branchNameStripped = branchName.strip()
+    return branchNameStripped
