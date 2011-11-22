@@ -14,6 +14,7 @@ from cookies import *
 
 class jiraObj:
     def __init__(self,issue):
+        #print "creating jiraObj for %s" % issue
         self.data = getIssueInfo(issue)
         if(self.data.has_key('errorMessages')):
             print "Warning: This issue doesn't exist: %s" % issue
