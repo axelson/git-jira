@@ -10,3 +10,5 @@
 * Initial setup should prompt for what project this is based on
 ** Should use the getJiraProjects() command
 * Support multiple projects in one repo
+* Find out why logs in two times quite often
+* Read from jira.url
