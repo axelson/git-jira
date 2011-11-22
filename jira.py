@@ -49,7 +49,7 @@ def opDescribe(argv):
         else:
             raise
     except cookie.HTTPError as inst:
-        print "Unable to find issue %s (%s)" (branchName, inst)
+        print "Unable to find issue %s (%s)" % (branchName, inst)
 
 def userChooseIssue():
     '''User operation to list the jira issues for the current project'''
