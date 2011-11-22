@@ -130,14 +130,6 @@ def prettyPrintJson(jsonText):
     import json
     print json.dumps(jsonText, sort_keys=True, indent=4)
 
-def getBranchName():
-    '''Return the name of the current branch'''
-    #TODO Move into a git.py file
-    # Expect output like 'refs/heads/dev'
-    output = run("git symbolic-ref HEAD")
-    branchName = output.split('/')[2]
-    return branchName
-
 def createBranch(branch):
     '''Create the given git branch'''
     run("git branch %s" % branch)
