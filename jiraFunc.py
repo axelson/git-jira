@@ -26,6 +26,7 @@ class jiraObj:
             self.description = None
         self.summary = self.data['fields']['summary']['value']
         self.status = self.data['fields']['status']['value']['name']
+
     def printData(self):
         print "name: %s" % self.name
         print "summary: %s" % self.summary

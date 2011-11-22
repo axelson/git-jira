@@ -82,10 +82,12 @@ class cookieHandler:
             handle = self.getPage(loginUrl)
         except self.HTTPError, err:
             if(err.code == 401):
+                #print "Check login return false"
                 return False
             else:
                 raise
         else:
+            #print "Already logged in"
             return True
 
     def doLogin(self):
