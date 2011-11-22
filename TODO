@@ -4,3 +4,6 @@
 * Pull jiraUrl from git config and set it on git jira init
 * Require git jira init to be run before doing operations
 ** Check if git jira init was run before doing operations
+* 401 code means that the session cookie has expired
+** Need to handle by re-logging in
+** But first step is to just catch the exception
