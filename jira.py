@@ -32,7 +32,7 @@ def stuff():
     #for issue in data['issues']:
     #    print issue['key']
 
-def describe(argv):
+def opDescribe(argv):
     branchName = None
     if(len(argv) == 1):
         branchName = argv[0]
@@ -113,7 +113,7 @@ def opInit(argv):
 
 
 operations = {
-        "describe": describe,
+        "describe": opDescribe,
         "feature": opFeature,
         "create": opCreate,
         "list": opList,
