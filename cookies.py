@@ -99,8 +99,13 @@ class cookieHandler:
         req = self.Request(loginUrl, txdata, txheaders)            # create a request object
         try:
             handle = self.urlopen(req)                               # and open it to return a handle on the url
-        except:
+        except self.HTTPError as inst:
+            print "Unable to login due to < %s >" % inst
+            self.cj.clear_session_cookies()
+            self.doLogin()
+            #TODO: Check if this works when a cookie is expired
             return
+
         print handle.read()
         print
         self.saveCookies()
