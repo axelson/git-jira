@@ -69,6 +69,11 @@ def getJiraProjectName():
 
     return jiraName
 
+def getJiraApiUrl():
+    url = 'http://' + jiraUrl + jiraApi
+    #print "returning jira api url: %s" % url
+    return url
+
 def getIssueInfo(issue):
     #print "Getting info for Jira issue %s" % issue
     endpoint = jiraApi + '/issue/' + issue
