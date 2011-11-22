@@ -3,6 +3,7 @@
 COOKIEFILE = 'cookies.lwp'          # the path and filename that you want to use to save your cookies in
 import os.path
 import sys
+import getpass
 from git_util import *
 
 class cookieHandler:
@@ -74,9 +75,13 @@ class cookieHandler:
         if not(self.checkLogin()):
             self.doLogin()
 
+    def getLoginUrl(self):
+        loginUrl = 'http://' + getGitValue('url') + '/rest/auth/latest/session'
+        return loginUrl
+
     def checkLogin(self):
         #print "check login running"
-        loginUrl = 'http://localhost:8080/rest/auth/latest/session'
+        loginUrl = self.getLoginUrl()
         handle = None
         try:
             handle = self.getPage(loginUrl)
@@ -92,9 +97,11 @@ class cookieHandler:
 
     def doLogin(self):
         username = getGitValue('username')
-        password = getGitValue('password')
+        #password = getGitValue('password')
+        #password = getpass.getpass()
+        password = 'hunter2'
         #TODO: Use correct url
-        loginUrl = 'http://localhost:8080/rest/auth/latest/session'
+        loginUrl = self.getLoginUrl()
         print "Logging in to JIRA (%s) as %s" % (loginUrl, username)
         txdata = '{"username" : "' + username +'", "password" : "'+ password +'"}'
         txheaders =  {'Content-Type' : 'application/json'}

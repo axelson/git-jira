@@ -49,7 +49,9 @@ class jiraObj:
 
 
 # Settings
-jiraUrl = 'localhost:8080'
+#jiraUrl = 'localhost:8080'
+jiraUrl = 'nihoa'
+#jiraUrl = getGitValue('url')
 jiraApi = '/rest/api/2.0.alpha1'
 headers = {'Content-type': 'application/json','Accept': 'application/json'}
 

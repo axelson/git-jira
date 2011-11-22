@@ -96,21 +96,19 @@ def opCreate(argv):
 def opLogin(argv):
     # Does the equivalent of this curl command
     # curl -c cookie_jar -H "Content-Type: application/json" -d '{"username" : "jaxelson", "password" : "hunter2"}' http://localhost:8080/rest/auth/latest/session
-    username = getGitValue('username')
-    password = getGitValue('password')
-    loginUrl = 'http://localhost:8080/rest/auth/latest/session'
-    txdata = '{"username" : "' + username +'", "password" : "'+ password +'"}'
-    txheaders =  {'Content-Type' : 'application/json'}
     cookie = cookieHandler()
-    req = cookie.Request(loginUrl, txdata, txheaders)            # create a request object
-    handle = cookie.urlopen(req)                               # and open it to return a handle on the url
-    print handle.read()
+    cookie.ensureLogin()
     cookie.saveCookies()
 
 def opInit(argv):
-    setGitValue('username', 'jaxelson')
-    setGitValue('password', 'hunter2')
-    loginUrl = 'http://localhost:8080/rest/auth/latest/session'
+    print "Please type your jira url (example, nihoa): "
+    url = raw_input()
+    setGitValue('url', url)
+
+    print "Please type your username (password is only asked at login): "
+    username = raw_input()
+    setGitValue('username', username)
+    loginUrl = 'http://localhosted:8080/rest/auth/latest/session'
     cookie = cookieHandler()
     import urllib2
     pass
