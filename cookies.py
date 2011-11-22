@@ -91,8 +91,9 @@ class cookieHandler:
     def doLogin(self):
         username = getGitValue('username')
         password = getGitValue('password')
-        print "Logging in to JIRA as %s" % username
+        #TODO: Use correct url
         loginUrl = 'http://localhost:8080/rest/auth/latest/session'
+        print "Logging in to JIRA (%s) as %s" % (loginUrl, username)
         txdata = '{"username" : "' + username +'", "password" : "'+ password +'"}'
         txheaders =  {'Content-Type' : 'application/json'}
         req = self.Request(loginUrl, txdata, txheaders)            # create a request object
