@@ -69,6 +69,20 @@ def getJiraProjectName():
 
     return jiraName
 
+def getJiraProjects():
+    '''
+    Gets the jira projects available to the currently logged in user
+    [{"self":"http://localhost:8080/rest/api/2.0.alpha1/project/HICAP","key":"HICAP","name":"HI Capacity","roles":{}},{"self":"http://localhost:8080/rest/api/2.0.alpha1/project/CC","key":"CC","name":"Test (cc)","roles":{}}]
+    '''
+    url = getJiraApiUrl() + '/project'
+
+    cookie = cookieHandler()
+    req = cookie.Request(url)
+    handle = cookie.urlopen(req)
+    jiraProjects = handle.read()
+    return jiraProjects
+
+
 def getJiraApiUrl():
     url = 'http://' + jiraUrl + jiraApi
     #print "returning jira api url: %s" % url
