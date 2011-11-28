@@ -62,7 +62,7 @@ class cookieHandler:
                 opener = ClientCookie.build_opener(ClientCookie.HTTPCookieProcessor(self.cj))
                 ClientCookie.install_opener(opener)
 
-        self.ensureLogin()
+        #self.ensureLogin()
 
     def getPage(self, newurl):
         req = self.Request(newurl)
