@@ -105,9 +105,9 @@ class cookieHandler:
         print "Logging in to JIRA (%s) as %s" % (loginUrl, username)
         txdata = '{"username" : "' + username +'", "password" : "'+ password +'"}'
         txheaders =  {'Content-Type' : 'application/json'}
-        req = self.Request(loginUrl, txdata, txheaders)            # create a request object
+        req = self.Request(loginUrl, txdata, txheaders)
         try:
-            handle = self.urlopen(req)                               # and open it to return a handle on the url
+            handle = self.urlopen(req)
         except self.HTTPError as inst:
             print "Unable to login due to < %s >" % inst
             self.cj.clear_session_cookies()
