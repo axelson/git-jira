@@ -97,6 +97,9 @@ def opLogin(argv):
     # Does the equivalent of this curl command
     # curl -c cookie_jar -H "Content-Type: application/json" -d '{"username" : "jaxelson", "password" : "hunter2"}' http://localhost:8080/rest/auth/latest/session
     cookie = cookieHandler()
+    if (cookie.checkLogin()):
+        print "Already logged in"
+        return
     cookie.ensureLogin()
     cookie.saveCookies()
 
