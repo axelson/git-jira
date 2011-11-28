@@ -101,7 +101,6 @@ def opLogin(argv):
         print "Already logged in"
         return
     cookie.ensureLogin()
-    cookie.saveCookies()
 
 def opInit(argv):
     setGitValue('username', 'jaxelson')
