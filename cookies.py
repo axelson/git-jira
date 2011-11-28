@@ -101,6 +101,11 @@ class cookieHandler:
         #password = getpass.getpass()
         password = 'hunter2'
         #TODO: Use correct url
+
+        if (self.checkLogin()):
+            # Already logged in
+            return
+
         loginUrl = self.getLoginUrl()
         print "Logging in to JIRA (%s) as %s" % (loginUrl, username)
         txdata = '{"username" : "' + username +'", "password" : "'+ password +'"}'
@@ -111,9 +116,11 @@ class cookieHandler:
         except self.HTTPError as inst:
             print "Unable to login due to < %s >" % inst
             self.cj.clear_session_cookies()
-            self.doLogin()
-            #TODO: Check if this works when a cookie is expired
-            return
+            if (inst.code == 401):
+                #TODO: Check if this works when a cookie is expired
+                print "Possible stale session (HTTP 401), attempting to login again"
+                self.doLogin()
+                return
 
         print handle.read()
         print
