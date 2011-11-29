@@ -20,20 +20,6 @@ operation = sys.argv[1]
 
 #print "Argument is %s " % operation
 
-def stuff():
-    jiraProject = getJiraProjectName()
-    print "jira name %s" % jiraProject
-
-    data = loadIssues(jiraProject)
-
-    issue = selectIssue(data['issues'])
-    detailedInfo = getIssueInfo(issue['key'])
-    prettyPrintJson(detailedInfo)
-    print "You want to start",
-    #simplePrintIssue(detailedInfo)
-    #for issue in data['issues']:
-    #    print issue['key']
-
 def opDescribe(argv):
     branchName = None
     if(len(argv) == 1):
