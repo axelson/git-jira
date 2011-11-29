@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import sys
+import getpass
 
 from jiraFunc import *
 from git_util import *
@@ -104,21 +105,27 @@ def opLogin(argv):
     con.ensureLogin()
 
 def opInit(argv):
-    setGitValue('username', 'jaxelson')
     setGitValue('password', 'hunter2')
     url = getJiraUrlFromUser()
     setGitValue('url', url)
 
-    print "Please type your username (password is only asked at login): "
+    print "Please type your username: "
     username = raw_input()
     setGitValue('username', username)
-    #TODO: Ask user if they want to store their password
 
-def getJiraUrlFromUser():
-    print "Please type your jira url (e.g.: nihoa): "
-    #TODO: Support parsing from browser login
+    #TODO: Ask user if they want to store their password
+    print "Do you want to store your password unencrypted in .git/config? (y/n)"
     selection = raw_input()
-    return selection
+    if (selection == 'y'):
+        password = getpass.getpass()
+        setGitValue('password', password)
+
+    jiraProject = getJiraProjectFromUser()
+    setGitValue('jiraname', jiraProject)
+
+    print
+    print "git-jira initialized successfully"
+
 
 
 operations = {
