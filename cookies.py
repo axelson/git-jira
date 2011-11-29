@@ -3,7 +3,6 @@
 COOKIEFILE = 'cookies.lwp'          # the path and filename that you want to use to save your cookies in
 import os.path
 import sys
-import getpass
 from git_util import *
 
 class cookieHandler:
@@ -65,68 +64,11 @@ class cookieHandler:
         #self.ensureLogin()
 
     def getPage(self, newurl):
+        print "cookies getPage: opening < %s >" % newurl
         req = self.Request(newurl)
         # create a request object
         handle = self.urlopen(req)
         return handle
-
-    def ensureLogin(self):
-        #print "ensure login"
-        if not(self.checkLogin()):
-            self.doLogin()
-
-    def getLoginUrl(self):
-        loginUrl = 'http://' + getGitValue('url') + '/rest/auth/latest/session'
-        return loginUrl
-
-    def checkLogin(self):
-        #print "check login running"
-        loginUrl = self.getLoginUrl()
-        handle = None
-        try:
-            handle = self.getPage(loginUrl)
-        except self.HTTPError, err:
-            if(err.code == 401):
-                #print "Check login return false"
-                return False
-            else:
-                raise
-        else:
-            #print "Already logged in"
-            return True
-
-    def doLogin(self):
-        username = getGitValue('username')
-        #password = getGitValue('password')
-        #password = getpass.getpass()
-        password = 'hunter2'
-        #TODO: Use correct url
-
-        if (self.checkLogin()):
-            # Already logged in
-            return
-
-        loginUrl = self.getLoginUrl()
-        print "Logging in to JIRA (%s) as %s" % (loginUrl, username)
-        txdata = '{"username" : "' + username +'", "password" : "'+ password +'"}'
-        txheaders =  {'Content-Type' : 'application/json'}
-        req = self.Request(loginUrl, txdata, txheaders)
-        try:
-            handle = self.urlopen(req)
-        except self.HTTPError as inst:
-            print "Unable to login due to < %s >" % inst
-            self.cj.clear_session_cookies()
-            if (inst.code == 401):
-                #TODO: Check if this works when a cookie is expired
-                print "Possible stale session (HTTP 401), attempting to login again"
-                self.doLogin()
-                return
-
-        print handle.read()
-        print
-        self.saveCookies()
-        if not(self.checkLogin()):
-            print "ERROR, Unable to Login"
 
     def printCookies(self):
         print 'These are the cookies we have received so far :'
@@ -135,3 +77,9 @@ class cookieHandler:
 
     def saveCookies(self):
         self.cj.save(COOKIEFILE, ignore_discard=True)
+
+    def clearSessionCookies(self):
+        self.cj.clear_session_cookies()
+
+    def getCookieJar(self):
+        return self.cj

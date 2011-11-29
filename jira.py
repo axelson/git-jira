@@ -4,6 +4,7 @@ import sys
 from jiraFunc import *
 from git_util import *
 from cookies import *
+from connection import *
 
 def printUsage():
     print "Usage: git jira [operation [args]]"
@@ -96,11 +97,11 @@ def opCreate(argv):
 def opLogin(argv):
     # Does the equivalent of this curl command
     # curl -c cookie_jar -H "Content-Type: application/json" -d '{"username" : "jaxelson", "password" : "hunter2"}' http://localhost:8080/rest/auth/latest/session
-    cookie = cookieHandler()
-    if (cookie.checkLogin()):
+    con = connection()
+    if (con.checkLogin()):
         print "Already logged in"
         return
-    cookie.ensureLogin()
+    con.ensureLogin()
 
 def opInit(argv):
     setGitValue('username', 'jaxelson')

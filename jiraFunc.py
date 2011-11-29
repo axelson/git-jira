@@ -9,6 +9,7 @@ from subprocess import PIPE
 from util import *
 from git_util import *
 from cookies import *
+from connection import *
 
 # Targetting jira version Atlassian JIRA (v4.3.3#617-r149616)
 
@@ -79,9 +80,8 @@ def getJiraProjects():
     '''
     url = getJiraApiUrl() + '/project'
 
-    cookie = cookieHandler()
-    req = cookie.Request(url)
-    handle = cookie.urlopen(req)
+    con = connection()
+    handle = con.getPage(url)
     jiraProjects = handle.read()
     return jiraProjects
 
@@ -96,8 +96,8 @@ def getIssueInfo(issue):
     endpoint = jiraApi + '/issue/' + issue
 
     url = 'http://' +jiraUrl + endpoint
-    cookie = cookieHandler()
-    handle = cookie.getPage(url)
+    con = connection()
+    handle = con.getPage(url)
     data = handle.read()
 
     loaded = json.loads(data)
@@ -112,15 +112,11 @@ def loadIssues(jiraProject):
 
     params = urllib.urlencode({'jql': query})
 
-    cookie = cookieHandler()
-    url = 'http://' + jiraUrl + endpoint+"?" +params
-    req = cookie.Request(url, None, headers)
-    handle = None
-    try:
-        handle = cookie.urlopen(req)
-    except cookie.HTTPError:
-        print "error occurred"
+    con = connection()
 
+    url = 'http://' + jiraUrl + endpoint+"?" +params
+    #req = cookie.Request(url, None, headers)
+    handle = con.getPage(url)
     data = handle.read()
 
     loaded = json.loads(data)
