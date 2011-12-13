@@ -46,6 +46,7 @@ class connection:
         password = getGitValue('password')
         #password = getpass.getpass()
         #password = 'hunter2'
+        print "Logging in with %s and %s" % (username, password)
         #TODO: Use correct url
 
         if (self.checkLogin()):
