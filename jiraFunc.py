@@ -71,19 +71,22 @@ def getJiraProjectName():
 
     return jiraName
 
-def getJiraProjectFromUser():
-    '''Asks the user to identify the JIRA project they are currently working on by querying the JIRA server for the list of projects and displaying them to the user'''
-    con = connection()
-    cookie = cookieHandler()
+def getJiraProjectFromUser(con):
+    '''Asks the user to identify the JIRA project they are currently working on by querying the JIRA server for the list of projects and displaying them to the user
+    param: con connection to jira
+    '''
+    cookie = con.getCookie()
+    con.ensureLogin()
     jiraProjects = ''
     try:
-        jiraProjects = getJiraProjects()
+        jiraProjects = getJiraProjects(con)
     except cookie.HTTPError as inst:
-        print "new http error %s" % inst
-        con.ensureLogin()
+        print "Error: new http error in try error %s" % inst
+        return
     print jiraProjects
     #TODO: Clean up output
-    print "What jira project are you working on (look in the key field)?"
+    print "What JIRA project are you working on (look in the key field)?"
+    print "JIRA project key:",
     selection = raw_input()
     return selection
 
@@ -94,18 +97,19 @@ def getJiraUrlFromUser():
     return selection
 
 
-def getJiraProjects():
+def getJiraProjects(connection):
     '''
     Gets the jira projects available to the currently logged in user.
     Example below:
     [{"self":"http://localhost:8080/rest/api/2.0.alpha1/project/HICAP","key":"HICAP","name":"HI Capacity","roles":{}},{"self":"http://localhost:8080/rest/api/2.0.alpha1/project/CC","key":"CC","name":"Test (cc)","roles":{}}]
+
+    param: connection the jira connection object to use
     '''
     url = getJiraApiUrl() + '/project'
 
     #print "url is < %s >" % url
-    con = connection()
     #TODO: This might cause a cookie.HTTPError with code 401
-    handle = con.getPage(url)
+    handle = connection.getPage(url)
     jiraProjects = handle.read()
     return jiraProjects
 
