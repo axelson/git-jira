@@ -106,7 +106,8 @@ def opInit(argv):
         password = getpass.getpass()
         setGitValue('password', password)
 
-    jiraProject = getJiraProjectFromUser()
+    con = connection()
+    jiraProject = getJiraProjectFromUser(con)
     setGitValue('jiraname', jiraProject)
 
     print
