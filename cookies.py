@@ -64,7 +64,7 @@ class cookieHandler:
         #self.ensureLogin()
 
     def getPage(self, newurl):
-        print "cookies getPage: opening < %s >" % newurl
+        #print "cookies getPage: opening < %s >" % newurl
         req = self.Request(newurl)
         # create a request object
         handle = self.urlopen(req)
