@@ -99,7 +99,6 @@ def opInit(argv):
     username = raw_input()
     setGitValue('username', username)
 
-    #TODO: Ask user if they want to store their password
     print "Do you want to store your password unencrypted in .git/config? (y/n)"
     selection = raw_input()
     if (selection == 'y'):
