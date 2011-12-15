@@ -12,3 +12,4 @@
 * Support multiple projects in one repo
 * Find out why logs in two times quite often
 * Read from jira.url
+* 'git jira describe all' will describe all branches in current repo (like CCMOC-224 and CCMOC-252)
