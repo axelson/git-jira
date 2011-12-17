@@ -22,8 +22,6 @@ if(len(sys.argv) < 2):
 
 operation = sys.argv[1]
 
-#print "Argument is %s " % operation
-
 def opDescribe(argv):
     '''Describe the current issue (based on branch name)'''
     branchName = None
