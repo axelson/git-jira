@@ -1,15 +1,9 @@
-* See if we can get the list of all projects on the current JIRA server
-** http://docs.atlassian.com/jira/REST/latest/#id2476168
-** /api/2.0.alpha1/project
 * Pull jiraUrl from git config and set it on git jira init
 * Require git jira init to be run before doing operations
 ** Check if git jira init was run before doing operations
-* 401 code means that the session cookie has expired
-** Need to handle by re-logging in
-** But first step is to just catch the exception
-* Initial setup should prompt for what project this is based on
-** Should use the getJiraProjects() command
 * Support multiple projects in one repo
 * Find out why logs in two times quite often
 * Read from jira.url
 * 'git jira describe all' will describe all branches in current repo (like CCMOC-224 and CCMOC-252)
+* git jira start <branch> should search from the existing issues and start from there
+** Only if there isn't any matching one should it start a new one (and only after prompting)
