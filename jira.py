@@ -9,8 +9,12 @@ from connection import *
 
 def printUsage():
     print "Usage: git jira [operation [args]]"
-    print "       git jira [describe [branch]]"
-    print "Valid operations: %s" % operations.keys()
+    print "       git jira describe [branch]"
+    print "       git jira start [branch]"
+    print
+    print "Valid operations:"
+    for operation in operations.keys():
+        print "\t%-8.8s - %s" % (operation, operations[operation].__doc__)
 
 if(len(sys.argv) < 2):
     printUsage()
@@ -21,6 +25,7 @@ operation = sys.argv[1]
 #print "Argument is %s " % operation
 
 def opDescribe(argv):
+    '''Describe the current issue (based on branch name)'''
     branchName = None
     if(len(argv) == 1):
         branchName = argv[0]
@@ -57,9 +62,11 @@ def opList(argv):
     listIssues(data['issues'])
 
 def opHelp(argv):
+    '''Show help'''
     printUsage()
 
 def opStart(argv):
+    '''Start an issue (currently only checks out the branch)'''
     if(len(argv) == 1):
         print "Checking out %s" % argv[0]
         issueName = argv[0]
@@ -76,12 +83,15 @@ def opStart(argv):
 
 
 def opFeature():
+    '''Nothing yet'''
     print "nothing"
 
 def opCreate(argv):
+    '''Nothing yet'''
     print "nothing"
 
 def opLogin(argv):
+    '''Login to JIRA'''
     # Does the equivalent of this curl command
     # curl -c cookie_jar -H "Content-Type: application/json" -d '{"username" : "jaxelson", "password" : "hunter2"}' http://localhost:8080/rest/auth/latest/session
     con = connection()
@@ -91,6 +101,7 @@ def opLogin(argv):
     con.ensureLogin()
 
 def opInit(argv):
+    '''Initialize this repository for use with JIRA'''
     setGitValue('password', 'hunter2')
     url = getJiraUrlFromUser()
     setGitValue('url', url)
