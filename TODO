@@ -5,6 +5,8 @@
 * describe
 ** 'git jira describe all' will describe all branches in current repo (like CCMOC-224 and CCMOC-252)
 ** 'git jira describe mine' that only shows the current users issues
+* list
+** 'git jira list mine' to list only the current users issues
 * git jira start <branch> should search from the existing issues and start from there
 ** Only if there isn't any matching one should it start a new one (and only after prompting)
 * check that password is actually optional and will be prompted for otherwise
