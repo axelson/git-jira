@@ -57,8 +57,9 @@ def opList(argv):
     checkInitialized()
     '''List all the open issues in the current project'''
     jiraProject = getJiraProjectName()
-    data = loadIssues(jiraProject)
+    data = loadMyIssues(jiraProject)
     print "Open issues:"
+    print data['issues']
     listIssues(data['issues'])
 
 def opHelp(argv):
@@ -89,6 +90,8 @@ def opFeature():
 
 def opCreate(argv):
     '''Nothing yet'''
+    con = connection()
+    jiraProject = getJiraProjectFromUser(con)
     print "nothing"
 
 def opLogin(argv):

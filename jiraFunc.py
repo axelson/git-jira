@@ -131,6 +131,28 @@ def getIssueInfo(issue):
     return loaded
 
 
+def loadMyIssues(jiraProject):
+    '''Load a list of open issues from JIRA'''
+    resolution = 'unresolved'
+    query = 'project=%(project)s AND resolution=%(resolution)s AND assignee = currentUser()' % {'project':jiraProject, 'resolution': resolution}
+
+    endpoint = jiraApi + '/search'
+
+    params = urllib.urlencode({'jql': query})
+
+    con = connection()
+
+    jiraUrl = getGitValue('url')
+    url = 'http://' + jiraUrl + endpoint+"?" +params
+    #req = cookie.Request(url, None, headers)
+    #TODO: Might cause a 401 error
+    handle = con.getPage(url)
+    data = handle.read()
+
+    loaded = json.loads(data)
+    #print loaded
+    return loaded
+
 def loadIssues(jiraProject):
     '''Load a list of open issues from JIRA'''
     resolution = 'unresolved'
