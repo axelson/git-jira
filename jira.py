@@ -24,6 +24,7 @@ operation = sys.argv[1]
 
 def opDescribe(argv):
     '''Describe the current issue (based on branch name)'''
+    checkInitialized()
     branchName = None
     if(len(argv) == 1):
         branchName = argv[0]
@@ -53,6 +54,7 @@ def userChooseIssue():
     return issue
 
 def opList(argv):
+    checkInitialized()
     '''List all the open issues in the current project'''
     jiraProject = getJiraProjectName()
     data = loadIssues(jiraProject)
@@ -64,6 +66,7 @@ def opHelp(argv):
     printUsage()
 
 def opStart(argv):
+    checkInitialized()
     '''Start an issue (currently only checks out the branch)'''
     if(len(argv) == 1):
         print "Checking out %s" % argv[0]
@@ -90,6 +93,7 @@ def opCreate(argv):
 
 def opLogin(argv):
     '''Login to JIRA'''
+    checkInitialized()
     # Does the equivalent of this curl command
     # curl -c cookie_jar -H "Content-Type: application/json" -d '{"username" : "jaxelson", "password" : "hunter2"}' http://localhost:8080/rest/auth/latest/session
     con = connection()

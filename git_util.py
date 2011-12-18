@@ -21,7 +21,8 @@ def getGitValue(name):
     value = run("git config %(prefix)s.%(name)s" % {'prefix': 'jira', 'name': name})
     if(value == ''):
         #TODO throw some type of keyerror
-        print "ERROR: no value for %s" % name
+        #print "ERROR: no value for %s" % name
+        pass
     return value.strip()
 
 def getBranchName():

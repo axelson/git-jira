@@ -174,6 +174,19 @@ def getIssueDescription(issues, issueToGet):
         if issueToGet in issue['key']:
             return issue
 
+def checkInitialized():
+    '''
+    Checks if the current repository is initialized for git jira, if it
+    isn't then give error and exit
+    '''
+    # Need to check for jiraname, username, and url
+    for name in ['jiraname', 'username', 'url']:
+        value = getGitValue(name)
+        if(value == ''):
+            print "Missing value for %s!" % name
+            print "Please run 'git jira init' to fix"
+            sys.exit(1)
+
 def prettyPrintJson(jsonText):
     import json
     print json.dumps(jsonText, sort_keys=True, indent=4)

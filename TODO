@@ -1,6 +1,4 @@
 * Pull jiraUrl from git config and set it on git jira init
-* Require git jira init to be run before doing operations
-** Check if git jira init was run before doing operations
 * Support multiple projects in one repo
 * Find out why logs in two times quite often
 * Read from jira.url
