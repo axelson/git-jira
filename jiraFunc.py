@@ -190,11 +190,3 @@ def checkInitialized():
 def prettyPrintJson(jsonText):
     import json
     print json.dumps(jsonText, sort_keys=True, indent=4)
-
-def createBranch(branch):
-    '''Create the given git branch'''
-    run("git branch %s" % branch)
-
-def checkoutBranch(branch):
-    '''Checkout the given git branch'''
-    run("git checkout %s" % branch)

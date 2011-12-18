@@ -33,3 +33,11 @@ def getBranchName():
     branchName = output.split('/')[2]
     branchNameStripped = branchName.strip()
     return branchNameStripped
+
+def createBranch(branch):
+    '''Create the given git branch'''
+    run("git branch %s" % branch)
+
+def checkoutBranch(branch):
+    '''Checkout the given git branch'''
+    run("git checkout %s" % branch)
