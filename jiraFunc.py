@@ -50,9 +50,6 @@ class jiraObj:
 
 
 # Settings
-#jiraUrl = 'localhost:8080'
-#jiraUrl = 'nihoa'
-jiraUrl = getGitValue('url')
 jiraApi = '/rest/api/2.0.alpha1'
 headers = {'Content-type': 'application/json','Accept': 'application/json'}
 
@@ -115,6 +112,7 @@ def getJiraProjects(connection):
 
 
 def getJiraApiUrl():
+    jiraUrl = getGitValue('url')
     url = 'http://' + jiraUrl + jiraApi
     #print "returning jira api url: %s" % url
     return url
@@ -123,6 +121,7 @@ def getIssueInfo(issue):
     #print "Getting info for Jira issue %s" % issue
     endpoint = jiraApi + '/issue/' + issue
 
+    jiraUrl = getGitValue('url')
     url = 'http://' +jiraUrl + endpoint
     con = connection()
     handle = con.getPage(url)
@@ -142,6 +141,7 @@ def loadIssues(jiraProject):
 
     con = connection()
 
+    jiraUrl = getGitValue('url')
     url = 'http://' + jiraUrl + endpoint+"?" +params
     #req = cookie.Request(url, None, headers)
     #TODO: Might cause a 401 error
