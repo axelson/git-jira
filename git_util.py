@@ -9,11 +9,6 @@ from subprocess import PIPE
 
 # Targetting jira version Atlassian JIRA (v4.3.3#617-r149616)
 
-# Settings
-jira = 'localhost:8080'
-jiraApi = '/rest/api/2.0.alpha1'
-headers = {'Content-type': 'application/json','Accept': 'application/json'}
-
 def setGitValue(name, value):
     run("git config %(prefix)s.%(name)s %(value)s" % {'prefix': 'jira', 'name': name, 'value': value})
 
