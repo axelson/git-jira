@@ -11,3 +11,4 @@
 ** Only if there isn't any matching one should it start a new one (and only after prompting)
 * check that password is actually optional and will be prompted for otherwise
 * Pretty print list of projects
+* git jira switch will switch between open branches while showing their summaries.
